@@ -10,9 +10,11 @@ int numberOfSingleLineText = 10;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
   String textContent = '';
   String from = '';
@@ -27,25 +29,31 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
   Widget imageWidget() {
-    return const CircleAvatar(
-        backgroundColor: Colors.white70,
-        foregroundImage: NetworkImage(
-            'https://img.xjh.me/random_img.php?type=bg&ctype=nature&return=302'),
-        radius: 90);
+    return AnimatedOpacity(
+      opacity: textContent == '' ? 0 : 1,
+      duration: const Duration(milliseconds: 2000),
+      child: const CircleAvatar(
+          backgroundColor: Colors.white70,
+          foregroundImage: NetworkImage(
+              'https://img.xjh.me/random_img.php?type=bg&ctype=nature&return=302'),
+          radius: 90),
+    );
   }
 
   // 竖排文字组件
   Widget textWidget() {
-    return VerticalText(
-        textContent: textContent,
-        from: from,
-        singleLineWidth: singleLineWidth,
-        numberOfSingleLineText: numberOfSingleLineText);
+    return AnimatedOpacity(
+        // 透明渐变动画
+        opacity: textContent == '' ? 0 : 1,
+        duration: const Duration(milliseconds: 2000),
+        child: VerticalText(
+            // 竖排文字组件
+            textContent: textContent,
+            from: from,
+            singleLineWidth: singleLineWidth,
+            numberOfSingleLineText: numberOfSingleLineText));
   }
-
-
 
   @override
   void initState() {

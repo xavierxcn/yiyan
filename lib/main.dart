@@ -21,6 +21,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: "ShuYunSong", brightness: Brightness.light), // 全局字体
+      darkTheme: ThemeData(fontFamily: "ShuYunSong", brightness: Brightness.dark),
       home: Scaffold(
         body: Stack(children: [
           const HomePage(),
