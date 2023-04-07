@@ -1,28 +1,56 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
-
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool darkModeOn = false;
-
+  bool customTheme = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  @override
+  void didChangePlatformBrightness() {
+    Brightness brightness = WidgetsBinding.instance.window.platformBrightness;
+    if (!customTheme) {
+      setState(() {
+        if (brightness.name == "light") {
+          darkModeOn = false;
+        } else {
+          darkModeOn = true;
+        }
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "ShuYunSong", brightness: Brightness.light), // 全局字体
-      darkTheme: ThemeData(fontFamily: "ShuYunSong", brightness: Brightness.dark),
+      theme: ThemeData(
+          fontFamily: 'ShuYunSong',
+          brightness: customTheme && !darkModeOn
+              ? Brightness.light
+              : customTheme && darkModeOn
+              ? Brightness.dark
+              : Brightness.light),
+      darkTheme: ThemeData(
+          fontFamily: 'ShuYunSong',
+          brightness: customTheme && !darkModeOn
+              ? Brightness.light
+              : customTheme && darkModeOn
+              ? Brightness.dark
+              : Brightness.dark),
       home: Scaffold(
         body: Stack(children: [
           const HomePage(),
@@ -39,6 +67,7 @@ class _MyAppState extends State<MyApp> {
                     size: 25),
                 onPressed: () {
                   setState(() {
+                    customTheme = true;
                     darkModeOn = !darkModeOn;
                   });
                 },
